@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  server:
+    build:
+      context: ./server
+    ports:
+      - "5050:5050"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    env_file:
+      - ./.env
+    restart: unless-stopped
+    command: npm run dev
+
+  client:
+    build:
+      context: ./client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    env_file:
+      - ./.env
+    restart: unless-stopped
+    depends_on:
+      - server
+    command: npm start
